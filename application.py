@@ -3,8 +3,10 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 import io
+from flask_cors import CORS
 
 application = Flask(__name__)
+CORS(application)
 
 # Load the trained model
 model = load_model('mood_detection_model.h5')
@@ -14,6 +16,7 @@ class_labels = {0: 'happy', 1: 'sad', 2: 'neutral'}
 
 @application.route('/predict', methods=['POST'])
 def predict():
+    print("hello")
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
 
@@ -38,4 +41,4 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    application.run(host='0.0.0.0',port=80, debug=True)
